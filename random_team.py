@@ -5,13 +5,15 @@ import re
 import random
 
 
-def get_champions(champions_url="https://lol.fandom.com/wiki/Portal:Champions/List"):
-    html_champions = requests.get(champions_url).content
-    df_list = pd.read_html(html_champions)
-    df = df_list[-1]
-    champions = df["Champion"]
-    champions = [champ.lower().replace(" ", "") for champ in champions]
-    return champions
+def get_champions(champions_url="https://app.mobalytics.gg/pt_br/lol/champions"):
+    url = champions_url
+    html = requests.get(url).content
+    soup = BeautifulSoup(html, "html.parser")
+    selection = soup.find_all("div", {"class": "m-1lrsgsv"})
+    selection = [str(a) for a in selection]
+    all_champions = [re.search(">(.*?)<", champ).group(1) for champ in selection]
+    all_champions = [c.lower().replace(" ", "") for c in all_champions]
+    return all_champions
 
 
 def filter_roles(champions, opgg_url = "https://br.op.gg/champion/statistics"):
@@ -41,4 +43,3 @@ if __name__ == "__main__":
     champions = get_champions()
     roles = filter_roles(champions)
     random_team(roles)
-
