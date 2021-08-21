@@ -1,0 +1,2 @@
+Simple python code to select a random champion to each role. 
+The champion list is find at "https://lol.fandom.com/wiki/Portal:Champions/List" and the champion roles are in "https://br.op.gg/champion/statistics" 
